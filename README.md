@@ -44,9 +44,44 @@ To get around this, I used Beautiful Soup to isolate the Attribute information f
         # combine with string to construct full link
         element_link_full = f'https://webscraper.io{element_link_partial}'
 
-Once visited, the scraping bot would collect all static information, then click two of four buttons that, when activated, changed the listed price of the currently viewed laptop. After clicking this button, I had the bot slice out the desired price for 256GB & 1024GB HDD/SSD laptops, then store the information into a dictionary before repeating with the next laptop in question.
+Once visited, the scraping bot would collect all static information, then click two of four buttons that, when activated, changed the listed price of the currently viewed laptop. After clicking this button, I had the bot slice out the desired price for 256GB & 1024GB HDD/SSD laptops, then the information goes through some light transformations before it is stored into a dictionary. The loop then repeats with the next laptop in question.
 
 Once all of the information was collected, I used Pandas to construct a Dataframe from the list of dictionaries before utilizing pd.series.astype() method to change the scraped data from strings to float or integer as needed before saving as a CSV on local.
+
+
+
+# Odds and Ends:
+
+## Why the function for a small program?
+
+In line 50, I made a function for the sake of adjusting should the client want more laptop information.
+This wayI can return and change one number in line 74 then run the program for maximum ease and utility.
+
+    Line 50:
+    for i, laptop in enumerate(all_laptops[:num_laptops]):
+        #isolate the link
+        a_tag = laptop.find('a')
+        # extract the url from the onclick attribute, slice out the link
+        element_link_partial = a_tag['onclick'].split("'")[1]
+        # combine with string to construct full link
+        element_link_full = f'https://webscraper.io{element_link_partial}'
+        # add to list for later use
+        link_list.append(element_link_full)
+        
+    return link_list
+
+        Line 74:
+        laptop_list = links_to_list(10)
+
+## Cleaning the Data during the Gathering/Extraction step:
+The data cleaning I performed was a simple mix of removing characters that would get in the way of further cleaning / aggregations.
+
+For example:
+The prices were float values, collected as strings, with '$' symbols in the mix. I removed the currency symbol and set the column as a float so that aggregations could be performed in other software, shoudl the CSV never make it back to Pandas.
+
+The Reviews was another matter of Data Type conversion. I made sure to convert these into integers before saving the final CSV.
+
+The laptops contained the names and colors in the same lines of the HTML code meaning that some have Colors in the name and some do not. To make future data cleaning simplier, I removed all of the commas so that the series elements could be split() and colors removed using a filter/replace logic if needed. Since this was the first step of the Data ETL process, I left data cleaning to a minimum.
 
 # Conclusion:
 
