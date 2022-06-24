@@ -44,6 +44,8 @@ To get around this, I used Beautiful Soup to isolate the Attribute information f
         # combine with string to construct full link
         element_link_full = f'https://webscraper.io{element_link_partial}'
 
+Manipulating the a tag attributes like this allowed me to simplify the scraping process by not adding logic for navigating the newly opened windows, and instead have simple commands to conduct all scraping in one window.
+
 Once visited, the scraping bot would collect all static information, then click two of four buttons that, when activated, changed the listed price of the currently viewed laptop. After clicking this button, I had the bot slice out the desired price for 256GB & 1024GB HDD/SSD laptops, then the information goes through some light transformations before it is stored into a dictionary. The loop then repeats with the next laptop in question.
 
 Once all of the information was collected, I used Pandas to construct a Dataframe from the list of dictionaries before utilizing pd.series.astype() method to change the scraped data from strings to float or integer as needed before saving as a CSV on local.
