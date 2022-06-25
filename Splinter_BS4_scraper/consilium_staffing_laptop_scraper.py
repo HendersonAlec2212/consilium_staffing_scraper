@@ -130,4 +130,4 @@ df['price_1024GB_usd'] = df['price_1024GB_usd'].astype('float')
 df['num_reviews'] = df['num_reviews'].astype('int')
 
 # save the data as csv
-df.to_csv('../data/scraped_laptop_info.csv', index=False)
+df.to_csv('scraped_laptop_info.csv', index=False)
